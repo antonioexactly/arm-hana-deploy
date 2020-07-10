@@ -124,7 +124,7 @@
         "api-version-vm": "2017-12-01",
         "vmPassword": "HANA07061992!",
         "mode": "Push",
-        "baseUri": "https://raw.githubusercontent.com/antonioexactly/saphananew/",
+        "baseUri": "https://raw.githubusercontent.com/antonioexactly/saphananew/master/",
         "nicName": "[if(equals(parameters('IPAllocationMethod'),'Static'),concat(parameters('vmName'),'-static'),concat(parameters('vmName'),'-dynamic'))]",
         "subnetRef": "[parameters('HANAsubnetRef')]",
         "OperatingSystemSpec": {

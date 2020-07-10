@@ -367,7 +367,7 @@ fi
 cd /hana/data/sapbits
 echo "hana download start" >> /tmp/parameter.txt
 /usr/bin/wget --quiet $Uri/SapBits/md5sums
-/usr/bin/wget --quiet "https://raw.githubusercontent.com/antonioexactly/saphananew/hdbinst.cfg"
+/usr/bin/wget --quiet "https://raw.githubusercontent.com/antonioexactly/saphananew/master/hdbinst.cfg"
 echo "hana download end" >> /tmp/parameter.txt
 
 date >> /tmp/testdate
