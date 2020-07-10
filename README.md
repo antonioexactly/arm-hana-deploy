@@ -66,7 +66,7 @@ To deploy from the portal using a graphic interface you can use the [![Deploy to
 ```powershell
 New-AzureRmResourceGroup -Name HANADeploymentRG -Location "Central US"
 New-AzureRmResourceGroupDeployment -Name HANADeployment -ResourceGroupName HANADeploymentRG `
-  -TemplateUri https://raw.githubusercontent.com/AzureCAT-GSI/SAP-HANA-ARM/master/azuredeploy.json `
+  -TemplateUri https://github.com/antonioexactly/saphananew/azuredeploy.json `
   -VMName HANAtestVM -HANAJumpbox yes -CustomURI https://yourBlobName.blob.core.windows.net/yourContainerName -VMPassword AweS0me@PW
 ```
 
@@ -78,7 +78,7 @@ az group create --name HANADeploymentRG --location "Central US"
 az group deployment create \
     --name HANADeployment \
     --resource-group HANADeploymentRG \
-    --template-uri "https://raw.githubusercontent.com/AzureCAT-GSI/SAP-HANA-ARM/master/azuredeploy.json" \
+    --template-uri "https://github.com/antonioexactly/saphananew/azuredeploy.json" \
     --parameters VMName=HANAtestVM HANAJumpbox=yes CustomURI=https://yourBlobName.blob.core.windows.net/yourContainerName VMPassword=AweS0me@PW
 ```
 ## Monitoring
@@ -124,7 +124,7 @@ Select the option of "Build your own template in the editor"
 
 ![Directories3](https://github.com/AzureCAT-GSI/SAP-HANA-ARM/blob/master/media/directories3.png)
 
-Copy the contents from the azuredeploy.json [file](https://raw.githubusercontent.com/AzureCAT-GSI/SAP-HANA-ARM/master/azuredeploy.json) and paste them into the template editor, click Save.
+Copy the contents from the azuredeploy.json [file](https://github.com/antonioexactly/saphananew/azuredeploy.json) and paste them into the template editor, click Save.
 
 ![Directories4](https://github.com/AzureCAT-GSI/SAP-HANA-ARM/blob/master/media/directories4.png)
 
