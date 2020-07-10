@@ -187,7 +187,7 @@
     },
   "variables": {
     "vmName": "[toLower(parameters('vmName'))]",
-    "baseUri": "https://github.com/antonioexactly/saphananew/",
+    "baseUri": "https://raw.githubusercontent.com/antonioexactly/saphananew/",
     "smallUri": "[concat(variables('baseUri'),'Vms/small.json')]",
     "mediumUri": "[concat(variables('baseUri'),'Vms/medium.json')]",
     "largeUri": "[concat(variables('baseUri'),'Vms/large.json')]",

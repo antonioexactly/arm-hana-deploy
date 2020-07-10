@@ -18,7 +18,7 @@ echo "creating hana cluster"
 az group deployment create \
 --name HANADeployment \
 --resource-group $rgname \
-   --template-uri "https://github.com/antonioexactly/saphananew/azuredeploy.json" \
+   --template-uri "https://raw.githubusercontent.com/antonioexactly/saphananew/azuredeploy.json" \
    --parameters \
    HanaVersion="SAP HANA PLATFORM EDITION 2.0 SPS03 REV30 (51053061)" \
    VMName="hana1" \
