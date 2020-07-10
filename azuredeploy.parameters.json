@@ -55,6 +55,21 @@
         },
         "StaticIP": {
           "value":  "10.0.5.4"
+        },
+        "HanaVersion": {
+            "value": "SAP HANA PLATFORM EDITION 2.0 SPS04 REV40 (51053787)"
+        },
+        "AvailSetName": {
+            "value": "hana-avail"
+        },
+        "SubscriptionEmail": {
+            "value": ""
+        },
+        "SubscriptionID": {
+            "value": ""
+        },
+        "SMTUri": {
+            "value": ""
         }               
     }
 }

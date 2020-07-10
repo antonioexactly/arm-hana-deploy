@@ -22,9 +22,9 @@ fi
 
 #decode hana version parameter
 HANAVER=${HANAVER^^}
-if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS01 REV 10 (51052030)" ]
+if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04 REV40 (51053787)" ]
 then
-  hanapackage="51052030"
+  hanapackage="51053787"
 else
   echo "not 51052030"
   if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS02 (51052325)" ]
@@ -36,9 +36,9 @@ else
     then
       hanapackage="51053061"
     else
-      if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS04 REV46 (51054413)" ]
+      if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS04 REV40 (51053787)" ]
       then
-        hanapackage="51054413"
+        hanapackage="51053787"
       else
         echo "not 51053061, default to 51052325"
         hanapackage="51052325"
@@ -310,9 +310,9 @@ if [ ! -d "/hana/data/sapbits" ]
 fi
 
 HANAVER=${HANAVER^^}
-if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS01 REV 10 (51052030)" ]
+if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04 REV40 (51053787)" ]
 then
-  hanapackage="51052030"
+  hanapackage="51053787"
 else
   echo "not 51052030"
   if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS02 (51052325)" ]
