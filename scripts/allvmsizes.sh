@@ -314,15 +314,15 @@ fi
 #####################
 SAPBITSDIR="/hana/data/sapbits"
 
-"${hanapackage}" = "51054413"
 
-if [ "${hanapackage}" = "51054413" ]
-then 
-  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}.ZIP
+
+if [ "${hanapackage}" = "51053787" ]
+then
+  /usr/bin/wget --quiet $Uri/SapBits/51054413.ZIP
   cd $SAPBITSDIR
   mkdir ${hanapackage}
   cd ${hanapackage}
-  unzip ../${hanapackage}.ZIP
+  unzip ../51054413.ZIP
   cd $SAPBITSDIR
   #add additional requirement
   zypper install -y libatomic1
