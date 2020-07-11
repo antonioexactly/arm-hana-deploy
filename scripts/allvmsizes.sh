@@ -314,7 +314,7 @@ fi
 #####################
 SAPBITSDIR="/hana/data/sapbits"
 
-hanapackage = "51054413"
+"${hanapackage}" = "51054413"
 
 if [ "${hanapackage}" = "51054413" ]
 then 
