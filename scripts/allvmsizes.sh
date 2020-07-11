@@ -318,8 +318,8 @@ SAPBITSDIR="/hana/data/sapbits"
 
 if [ "${hanapackage}" = "51053787" ]
 then
-  /usr/bin/wget $Uri/SapBits/51054413.ZIP
   cd $SAPBITSDIR
+  /usr/bin/wget $Uri/SapBits/51054413.ZIP
   mkdir ${hanapackage}
   cd ${hanapackage}
   unzip ../51054413.ZIP
