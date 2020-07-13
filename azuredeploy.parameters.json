@@ -9,7 +9,7 @@
             "value": "no"
         },
         "VMSize": {
-            "value": "Standard_E16s_v3 (128 GB)"
+            "value": "Standard_GS5 (448 GB, Certified)"
         },
         "NetworkName": {
             "value": "ra-sap-hana-vnet"
@@ -30,7 +30,7 @@
             "value": "10.0.6.0/24"
         },
         "customURI": {
-            "value": "https://storage.googleapis.com/sapmediarosete"            
+            "value": "https://storage.googleapis.com/sapmediarosete/"            
         },
         "VMUserName": {
             "value": "testuser"
