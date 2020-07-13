@@ -2,13 +2,13 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "HanaVersion": {
-            "type": "string",
-            "metadata": {
-                "description": "Version of HANA"
-            },
-            "defaultValue": "SAP HANA PLATFORM EDITION 2.0 SPS04 REV40 (51053787)"
-        },   
+      "HanaVersion": {
+        "type": "string",
+        "metadata": {
+          "description": "Version of HANA"
+        },
+        "defaultValue": "SAP HANA PLATFORM EDITION 2.0 SPS04 REV46 (51054413)"
+      },   
         "VMName": {
             "type": "string",
             "maxLength": 13,
