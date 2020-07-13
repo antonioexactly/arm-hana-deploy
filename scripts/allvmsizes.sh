@@ -22,29 +22,9 @@ fi
 
 #decode hana version parameter
 HANAVER=${HANAVER^^}
-if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04 REV40 (51053787)" ]
+if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04 REV46 (51054413)" ]
 then
-  hanapackage="51053787"
-else
-  echo "not 51052030"
-  if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS02 (51052325)" ]
-  then
-    hanapackage="51052325"
-  else
-  echo "not 51052325"
-    if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS03 REV30 (51053061)" ]
-    then
-      hanapackage="51053061"
-    else
-      if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS04 REV40 (51053787)" ]
-      then
-        hanapackage="51054413"
-      else
-        echo "not 51053061, default to 51052325"
-        hanapackage="51052325"
-      fi
-    fi
-  fi
+  hanapackage="51054413"
 fi
 
 #get the VM size via the instance api
@@ -316,13 +296,13 @@ SAPBITSDIR="/hana/data/sapbits"
 
 
 
-if [ "${hanapackage}" = "51053787" ]
+if [ "${hanapackage}" = "51054413" ]
 then
   cd $SAPBITSDIR
-  /usr/bin/wget $Uri/SapBits/51054413.ZIP
+  /usr/bin/wget $Uri/SapBits/${hanapackage}.ZIP
   mkdir ${hanapackage}
   cd ${hanapackage}
-  unzip ../51054413.ZIP
+  unzip ../${hanapackage}.ZIP
   cd $SAPBITSDIR
   #add additional requirement
   zypper install -y libatomic1
