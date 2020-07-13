@@ -22,7 +22,6 @@ az group deployment create \
    --parameters \
    HanaVersion="SAP HANA PLATFORM EDITION 2.0 SPS03 REV30 (51053061)" \
    VMName="hana1" \
-   HANAJumpbox="yes" \
    VMSize="Standard_E16s_v3 (128 GB)" \
    customURI="${customuri}" \
    VMUserName=$vmusername \
