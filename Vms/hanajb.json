@@ -38,7 +38,7 @@
         "scriptFolder": ".",
         "scriptFileName": "hanastudio.ps1",
         "scriptParameters": "[concat(' -BaseURI ', parameters('customUri'))]",
-        "fileuri": "https://raw.githubusercontent.com/antonioexactly/saphananew/master/hanastudio.ps1"
+        "fileuri": "https://raw.githubusercontent.com/antonioexactly/arm-hana-deploy/master/hanastudio.ps1"
     },
     "resources": [
         {
