@@ -22,10 +22,10 @@ fi
 
 #decode hana version parameter
 HANAVER=${HANAVER^^}
-if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04 REV46 (51054413)" ]
-then
-  hanapackage="51054413"
-fi
+#if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04" ]
+#then
+#  hanapackage="51054413"
+#fi
 
 #get the VM size via the instance api
 VMSIZE=`curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/vmSize?api-version=2017-08-01&format=text"`
@@ -295,32 +295,92 @@ fi
 SAPBITSDIR="/hana/data/sapbits"
 
 
+#Rewrite for better automation
+if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04" ] 
+  cd $SAPBITSDIR
+  /usr/bin/wget $Uri/SapBits/SP04/*.ZIP
+  mkdir "HANAMedia"
+  cd "HANAMedia"
+  unzip ../*.ZIP
+  cd $SAPBITSDIR
+ #add additional requirement
+  zypper install -y libatomic1then
+else 
+    if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS05" ]
+    then
+        cd $SAPBITSDIR
+        /usr/bin/wget $Uri/SapBits/SP05/*.ZIP
+        mkdir "HANAMedia"
+        cd "HANAMedia"
+        unzip ../*.ZIP
+        cd $SAPBITSDIR
+        #add additional requirement
+        zypper install -y libatomic1then
+    else
+        if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS02" ]
+        then
+              cd $SAPBITSDIR
+              /usr/bin/wget --quiet $Uri/SapBits/SP02/*_part1.exe
+              /usr/bin/wget --quiet $Uri/SapBits/SP02/*_part2.rar
+              /usr/bin/wget --quiet $Uri/SapBits/SP02/*_part3.rar
+              /usr/bin/wget --quiet $Uri/SapBits/SP02/*_part4.rar
+              cd $SAPBITSDIR
 
-if [ "${hanapackage}" = "51054413" ]
-then
-  cd $SAPBITSDIR
-  /usr/bin/wget $Uri/SapBits/${hanapackage}.ZIP
-  mkdir ${hanapackage}
-  cd ${hanapackage}
-  unzip ../${hanapackage}.ZIP
-  cd $SAPBITSDIR
-  #add additional requirement
-  zypper install -y libatomic1
-else
-  cd /hana/data/sapbits
-  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part1.exe
-  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part2.rar
-  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part3.rar
-  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part4.rar
-  cd $SAPBITSDIR
+              echo "hana unrar start" >> /tmp/parameter.txt
+              #!/bin/bash
+              cd $SAPBITSDIR
+              mkdir "HANAMedia"
+              cd "HANAMedia"
+              unrar  -o- x *_part1.exe
+              echo "hana unrar end" >> /tmp/parameter.txt
+        else      
+            if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS03" ]
+            then
+                  cd $SAPBITSDIR
+                  /usr/bin/wget --quiet $Uri/SapBits/SP03/*_part1.exe
+                  /usr/bin/wget --quiet $Uri/SapBits/SP03/*_part2.rar
+                  /usr/bin/wget --quiet $Uri/SapBits/SP03/*_part3.rar
+                  /usr/bin/wget --quiet $Uri/SapBits/SP03/*_part4.rar
+                  cd $SAPBITSDIR
 
-  echo "hana unrar start" >> /tmp/parameter.txt
-  #!/bin/bash
-  cd $SAPBITSDIR
-  unrar  -o- x ${hanapackage}_part1.exe
-  echo "hana unrar end" >> /tmp/parameter.txt
-
+                  echo "hana unrar start" >> /tmp/parameter.txt
+                  #!/bin/bash
+                  cd $SAPBITSDIR
+                  mkdir "HANAMedia"
+                  cd "HANAMedia"
+                  unrar  -o- x *_part1.exe
+                  echo "hana unrar end" >> /tmp/parameter.txt
+            fi
+        fi
+    fi
 fi
+
+
+#if [ "${hanapackage}" = "51054413" ]
+#then
+#  cd $SAPBITSDIR
+#  /usr/bin/wget $Uri/SapBits/${hanapackage}.ZIP
+#  mkdir ${hanapackage}
+#  cd ${hanapackage}
+#  unzip ../${hanapackage}.ZIP
+#  cd $SAPBITSDIR
+  #add additional requirement
+#  zypper install -y libatomic1
+#else
+#  cd /hana/data/sapbits
+#  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part1.exe
+#  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part2.rar
+#  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part3.rar
+#  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part4.rar
+#  cd $SAPBITSDIR
+
+#  echo "hana unrar start" >> /tmp/parameter.txt
+  #!/bin/bash
+#  cd $SAPBITSDIR
+#  unrar  -o- x ${hanapackage}_part1.exe
+#  echo "hana unrar end" >> /tmp/parameter.txt
+
+#fi
 #####################
 
 
@@ -342,7 +402,7 @@ cd /hana/data/sapbits
 cd /hana/data/sapbits
 myhost=`hostname`
 sedcmd="s/REPLACE-WITH-HOSTNAME/$myhost/g"
-sedcmd2="s/\/hana\/shared\/sapbits\/51052325/\/hana\/data\/sapbits\/${hanapackage}/g"
+sedcmd2="s/\/hana\/shared\/sapbits\/51052325/\/hana\/data\/sapbits\/HANAMedia/g"
 sedcmd3="s/root_user=root/root_user=$HANAUSR/g"
 sedcmd4="s/AweS0me@PW/$HANAPWD/g"
 sedcmd5="s/sid=H10/sid=$HANASID/g"
