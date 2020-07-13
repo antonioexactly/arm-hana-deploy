@@ -297,6 +297,7 @@ SAPBITSDIR="/hana/data/sapbits"
 
 #Rewrite for better automation
 if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04" ] 
+then
   cd $SAPBITSDIR
   /usr/bin/wget $Uri/SapBits/SP04/*.ZIP
   mkdir "HANAMedia"
@@ -304,7 +305,7 @@ if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04" ]
   unzip ../*.ZIP
   cd $SAPBITSDIR
  #add additional requirement
-  zypper install -y libatomic1then
+  zypper install -y libatomic1
 else 
     if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS05" ]
     then
@@ -315,7 +316,7 @@ else
         unzip ../*.ZIP
         cd $SAPBITSDIR
         #add additional requirement
-        zypper install -y libatomic1then
+        zypper install -y libatomic1
     else
         if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS02" ]
         then
