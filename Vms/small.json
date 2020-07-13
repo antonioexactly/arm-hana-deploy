@@ -96,28 +96,7 @@
               "description": "This is the name of the availability set to deploy the machine in"
             },
             "defaultValue": ""
-          },            
-        "SubscriptionEmail": {
-            "type": "string",
-            "metadata": {
-                "description": "OS Subscription Email for BYOS, blank for PAYG"
-            },
-            "defaultValue": ""
-        },
-        "SubscriptionID": {
-            "type": "string",
-            "metadata": {
-                "description": "OS Subscription ID for BYOS, blank for PAYG"
-            },
-            "defaultValue": ""
-        },
-        "SMTUri": {
-            "type": "string",
-            "metadata": {
-                "description": "SMT Uri, blank for none"
-            },
-            "DefaultValue": ""
-        }
+          }
     },
     "variables": {
         "api-version": "2017-06-01",
@@ -128,7 +107,7 @@
         "subnetRef": "[parameters('HANASubnetRef')]",
         "OperatingSystemSpec": {
             "imagePublisher": "[if (contains(parameters('OperatingSystem'),'SLES'),'SUSE','RedHat')]",
-            "imageOffer": "[if (contains(parameters('OperatingSystem'),'SLES'),if (contains(parameters('SubscriptionEmail'),'@'),'SLES-SAP-BYOS','SLES-SAP'),'RHEL-SAP-HANA')]",
+            "imageOffer": "[if (contains(parameters('OperatingSystem'),'SLES') ,'SLES-SAP''RHEL-SAP-HANA')]",
             "sku": "[if (contains(parameters('OperatingSystem'),'12 SP3'),'12-SP3',if (contains(parameters('OperatingSystem'),'12 SP2'),'12-SP2','7.2'))]"
         },
         "diskConfig": "[variables(concat('diskConfig_', parameters('vmSize')))]",
@@ -426,7 +405,7 @@
                             "fileUris": [
                                 "[concat(variables('baseUri'),'scripts/allvmsizes.sh')]"
                             ],
-                            "commandToExecute": "[concat('sh allvmsizes.sh \"', parameters('customUri'), '\" \"' , parameters('HanaVersion'), '\"  \"' , parameters('vmUserName'), '\" \"', parameters('vmPassword'),'\" \"', parameters('HANASID'), '\" \"', parameters('HANANUMBER'), '\" \"', parameters('vmSize'), '\" \"',parameters('SubscriptionEmail'), '\" \"', parameters('SubscriptionID'),'\"  \"', parameters('SMTUri'),'\"')]"
+                            "commandToExecute": "[concat('sh allvmsizes.sh \"', parameters('customUri'), '\" \"' , parameters('HanaVersion'), '\"  \"' , parameters('vmUserName'), '\" \"', parameters('vmPassword'),'\" \"', parameters('HANASID'), '\" \"', parameters('HANANUMBER'), '\" \"', parameters('vmSize'))]"
                         }
                     }
                 }

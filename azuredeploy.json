@@ -16,16 +16,6 @@
                 "description": "VM Name"
             }
         },
-        "HANAJumpbox": {
-            "type": "string",
-            "metadata": {
-                "description": "Choose whether to deploy a VM with HANA Studio installed"
-            },
-            "allowedValues": [
-                "yes",
-                "no"
-            ]
-        },
         "VMSize": {
             "type": "string",
             "metadata": {
@@ -162,28 +152,7 @@
             "description": "This is the name of the availability set to deploy the machine in"
           },
           "defaultValue": "hana-avail"
-        },                    
-        "SubscriptionEmail": {
-          "type": "string",
-          "metadata": {
-            "description": "OS Subscription Email for BYOS, blank for PAYG"
-          },
-          "defaultValue": ""
-        },              
-        "SubscriptionID": {
-          "type": "string",
-          "metadata": {
-            "description": "OS Subscription ID for BYOS, blank for PAYG"
-          },
-          "defaultValue": ""
-        },
-        "SMTUri": {
-            "type": "string",
-            "metadata": {
-              "description": "SMT URI, blank for none"
-            },
-            "defaultValue": ""
-          }                               
+        }                    
     },
   "variables": {
     "vmName": "[toLower(parameters('vmName'))]",
@@ -228,7 +197,7 @@
         }
       },
           { 
-            "condition": "[or(or(equals(variables('vmSize'),'Standard_E16s_v3'),equals(variables('vmSize'),'Standard_E32s_v3')), or(equals(variables('vmSize'),'Standard_E64s_v3'),equals(variables('vmSize'),'Standard_GS5')))]",
+            
             "apiVersion": "2016-09-01",
             "name": "[concat('SmallLinkedTemplate', parameters('VMName'))]",
             "type": "Microsoft.Resources/deployments",
@@ -279,16 +248,7 @@
                     },
                     "AvailSetName": {
                         "value": "[parameters('AvailSetName')]"
-                      },                             
-                    "SubscriptionEmail":{
-                        "value": "[parameters('SubscriptionEmail')]"
-                    },
-                    "SubscriptionID":{
-                        "value": "[parameters('SubscriptionID')]"
-                    },
-                    "SMTUri":{
-                        "value": "[parameters('SMTUri')]"
-                    }
+                      }
                 }
             }
         }
