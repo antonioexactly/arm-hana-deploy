@@ -33,7 +33,15 @@
                 "Standard_E32s_v3 (256 GB)",
                 "Standard_E64s_v3 (448 GB)"
             ]
-        },   
+        },
+        "DiskReference": {
+            "type": "int",
+            "defaultValue": 128
+            
+        },
+
+
+
         "NetworkName": {
             "type": "string",
             "defaultValue": "ra-sap-hana-vnet",
@@ -194,39 +202,7 @@
             "imageOffer": "[if (contains(parameters('OperatingSystem'),'SLES'),if (contains(parameters('SubscriptionEmail'),'@'),'SLES-SAP-BYOS','SLES-SAP'),'RHEL-SAP-HANA')]",
             "sku": "[if (contains(parameters('OperatingSystem'),'12 SP3'),'12-SP3',if (contains(parameters('OperatingSystem'),'12 SP2'),'12-SP2','7.2'))]"
         },
-        "diskConfig": "[variables(concat('diskConfig_', parameters('vmSize')))]",
-        "diskConfig_Standard_E16s_v3": {
-            "shared": 511,
-            "sap": 63,
-            "backup": 255,
-            "data1": 511,
-            "data2": 511,
-            "data3": 511
-        },
-        "diskConfig_Standard_E32s_v3": {
-            "shared": 511,
-            "sap": 63,
-            "backup": 511,
-            "data1": 511,
-            "data2": 511,
-            "data3": 511
-        },
-        "diskConfig_Standard_E64s_v3": {
-            "shared": 511,
-            "sap": 63,
-            "backup": 1023,
-            "data1": 511,
-            "data2": 511,
-            "data3": 511
-        },
-        "diskConfig_Standard_GS5": {
-            "shared": 511,
-            "sap": 63,
-            "backup": 1023,
-            "data1": 511,
-            "data2": 511,
-            "data3": 511
-        }
+        "diskConfig": "[variables(concat('diskConfig_', parameters('vmSize')))]"
 
 
 
@@ -322,7 +298,7 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[variables('diskConfig').shared]"
+                "diskSizeGB": "[parameters('DiskReference')]"
             }
         },
         {
@@ -338,7 +314,7 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[variables('diskConfig').sap]"
+                "diskSizeGB": "[parameters('DiskReference')]"
             }
         },
         {
@@ -354,7 +330,7 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[variables('diskConfig').backup]"
+                "diskSizeGB": "[parameters('DiskReference')]"
             }
         },
         {
@@ -370,7 +346,7 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[variables('diskConfig').data1]"
+                "diskSizeGB": "[parameters('DiskReference')]"
             }
         },
         {
@@ -386,7 +362,7 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[variables('diskConfig').data2]"
+                "diskSizeGB": "[parameters('DiskReference')]"
             }
         },
         {
@@ -402,7 +378,7 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[variables('diskConfig').data3]"
+                "diskSizeGB": "[parameters('DiskReference')]"
             }
         },        
         {
