@@ -17,7 +17,11 @@
             }
         },
         "VMSize": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "VM Size"
+            },
+            "defaultValue": "Standard_E16s_v4"
         },
         "DiskReference": {
             "type": "int",
