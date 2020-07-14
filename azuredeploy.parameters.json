@@ -29,9 +29,9 @@
         "ManagementSubnetPrefix": {
             "value": "10.0.6.0/24"
         },
-        "customURI": {
-            "value": "https://storage.googleapis.com/sapmediarosete/"            
-        },
+      "customURI": {
+        "value": "https://eitmedpres1sta.blob.core.windows.net/sapmedias/"               
+      },
         "VMUserName": {
             "value": "testuser"
         },
