@@ -1,5 +1,5 @@
 {
-    "parameters": {
+   
 
         "hana":{
             "VMName":  "testVm",
@@ -33,6 +33,6 @@
         
         
         }               
-    }
+   
 }
 
