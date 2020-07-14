@@ -9,7 +9,7 @@
             "value": "no"
         },
         "VMSize": {
-            "value": "Standard_E16s_v4"
+            "value": "Standard_DS14_v2"
         },
         "NetworkName": {
             "value": "ra-sap-hana-vnet"
