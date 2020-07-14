@@ -299,7 +299,7 @@ SAPBITSDIR="/hana/data/sapbits"
 if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04" ] 
 then
   cd $SAPBITSDIR
-  /usr/bin/wget $Uri/SapBits/SP04/HANA.ZIP
+  /usr/bin/wget $Uri/SapHana/SP04/HANA.ZIP
   mkdir "HANAMedia"
   cd "HANAMedia"
   unzip ../HANA.ZIP
@@ -310,7 +310,7 @@ else
     if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS05" ]
     then
         cd $SAPBITSDIR
-        /usr/bin/wget $Uri/SapBits/SP05/HANA.ZIP
+        /usr/bin/wget $Uri/SapHana/SP05/HANA.ZIP
         mkdir "HANAMedia"
         cd "HANAMedia"
         unzip ../HANA.ZIP
@@ -321,10 +321,10 @@ else
         if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS02" ]
         then
               cd $SAPBITSDIR
-              /usr/bin/wget --quiet $Uri/SapBits/SP02/HANA_part1.exe
-              /usr/bin/wget --quiet $Uri/SapBits/SP02/HANA_part2.rar
-              /usr/bin/wget --quiet $Uri/SapBits/SP02/HANA_part3.rar
-              /usr/bin/wget --quiet $Uri/SapBits/SP02/HANA_part4.rar
+              /usr/bin/wget --quiet $Uri/SapHana/SP02/HANA_part1.exe
+              /usr/bin/wget --quiet $Uri/SapHana/SP02/HANA_part2.rar
+              /usr/bin/wget --quiet $Uri/SapHana/SP02/HANA_part3.rar
+              /usr/bin/wget --quiet $Uri/SapHana/SP02/HANA_part4.rar
               cd $SAPBITSDIR
 
               echo "hana unrar start" >> /tmp/parameter.txt
@@ -338,10 +338,10 @@ else
             if [ "$HANAVER" = "SAP HANA PLATFORM EDITION 2.0 SPS03" ]
             then
                   cd $SAPBITSDIR
-                  /usr/bin/wget --quiet $Uri/SapBits/SP03/HANA_part1.exe
-                  /usr/bin/wget --quiet $Uri/SapBits/SP03/HANA_part2.rar
-                  /usr/bin/wget --quiet $Uri/SapBits/SP03/HANA_part3.rar
-                  /usr/bin/wget --quiet $Uri/SapBits/SP03/HANA_part4.rar
+                  /usr/bin/wget --quiet $Uri/SapHana/SP03/HANA_part1.exe
+                  /usr/bin/wget --quiet $Uri/SapHana/SP03/HANA_part2.rar
+                  /usr/bin/wget --quiet $Uri/SapHana/SP03/HANA_part3.rar
+                  /usr/bin/wget --quiet $Uri/SapHana/SP03/HANA_part4.rar
                   cd $SAPBITSDIR
 
                   echo "hana unrar start" >> /tmp/parameter.txt
@@ -389,7 +389,7 @@ fi
 #!/bin/bash
 cd /hana/data/sapbits
 echo "hana download start" >> /tmp/parameter.txt
-/usr/bin/wget --quiet $Uri/SapBits/md5sums
+/usr/bin/wget --quiet $Uri/SapHana/md5sums
 /usr/bin/wget --quiet "https://raw.githubusercontent.com/antonioexactly/arm-hana-deploy/master/hdbinst.cfg"
 echo "hana download end" >> /tmp/parameter.txt
 
