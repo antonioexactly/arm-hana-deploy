@@ -1,7 +1,6 @@
 {
-   
+    "parameters": {
 
-        
             "VMName":  "testVm",
             "VMSize":  "Standard_DS14_v2",
             "NetworkName":  "ra-sap-hana-vnet",
@@ -32,7 +31,7 @@
             }    
         
         
-   
-   
+        }               
+
 }
 
