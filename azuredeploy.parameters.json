@@ -9,7 +9,7 @@
             "value": "no"
         },
         "VMSize": {
-            "value": "Standard_E16s_v3"
+            "value": "Standard_E16s_v4"
         },
         "NetworkName": {
             "value": "ra-sap-hana-vnet"
@@ -36,7 +36,7 @@
             "value": "testuser"
         },
         "VMPassword": {
-            "value": "YourPassword"
+            "value": "YourPassword123."
                         },                    
         "OperatingSystem": {
             "value":  "SLES for SAP 12 SP3"
