@@ -9,39 +9,12 @@
   "variables": {
         "nicName": "[concat(parameters('envParameters').vmName,'-Dynamic')]",
         "HANAsubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('envParameters').NetworkName, parameters('envParameters').HANASubnetName)]"
-    
+     
 
 },
     "resources": [
 
-        {
-        //"condition": "[equals(parameters('envParameters').ExistingNetworkResourceGroup), 'no]",
-        "apiVersion": "2016-09-01",
-        "type": "Microsoft.Network/virtualNetworks",
-        "name": "[parameters('envParameters').NetworkName]",
-        "location": "[resourceGroup().location]",
-        "properties": {
-          "addressSpace": {
-            "addressPrefixes": [
-              "[parameters('envParameters').addressPrefixes]"
-            ]
-          },
-          "subnets": [
-            {
-              "name": "[parameters('envParameters').HANASubnetName]",
-              "properties": {
-                "addressPrefix": "[parameters('envParameters').HANASubnetPrefix]"
-              }
-            },
-            {
-                "name": "[parameters('envParameters').ManagementSubnetName]",
-                "properties": {
-                  "addressPrefix": "[parameters('envParameters').ManagementSubnetPrefix]"
-                }
-              }
-          ]
-        }
-      },
+
          
          {
             "apiVersion": "2018-04-01",
@@ -56,7 +29,10 @@
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
-                                "id": "[variables('HANAsubnetRef')]"
+                                
+                                
+                                "id": "[resourceId('eit-spk-net-prd-ea1-rg', 'Microsoft.Network/virtualNetworks/subnets', parameters('envParameters').NetworkName, 'DatabaseSubnet')]"
+                                
                             }
                         }
                     }

@@ -10,12 +10,12 @@
                 
                 "VMName":  "testVm",
                 "VMSize":  "Standard_DS14_v2",
-                "NetworkName":  "ra-sap-hana-vnet",
-                "addressPrefixes":  "10.0.0.0/16",
-                "HANASubnetName":  "SAPDataSubnet",
-                "HANASubnetPrefix":  "10.0.5.0/24",
+                "NetworkName":  "eitspk-sapprd-ea1-vnet",
+                
+                "HANASubnetName":  "DatabaseSubnet",
+                
                 "ManagementSubnetName":  "SAPMgmtSubnet",
-                "ManagementSubnetPrefix":  "10.0.6.0/24",
+                
                 "customURI": "https://eitmedpres1sta.blob.core.windows.net/sapmedias/",
                 "VMUserName":  "testuser",
                 "VMPassword":  "YourPassword123.",
@@ -24,7 +24,7 @@
                 "HANANumber":  "00",
                 "ExistingNetworkResourceGroup":  "no",
                 "IPAllocationMethod":  "Static",
-                "StaticIP": "10.0.5.4",
+                
                 "HanaVersion":  "SAP HANA PLATFORM EDITION 2.0 SPS04",
                 "AvailSetName":  "hana-avail",
                 "SubscriptionEmail":  "",
