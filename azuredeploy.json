@@ -7,7 +7,10 @@
         }
     },
   "variables": {
-        "nicName": "vmip-static"
+        "nicName": "[concat(parameters('envParameters').vmName,'-Dynamic')]",
+        "HANAsubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('envParameters').NetworkName, parameters('envParameters').HANASubnetName)]"
+    
+
 },
     "resources": [
 
@@ -40,9 +43,8 @@
         }
       },
          
-        {
-            //"condition": "[equals(parameters('envParameters').IPAllocationMethod'), 'Dynamic]",
-            "apiVersion": "2018-10-01",
+         {
+            "apiVersion": "2018-04-01",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[concat(parameters('envParameters').vmName,'-dynamic')]",
             "location": "[resourceGroup().location]",
@@ -54,7 +56,7 @@
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
-                                "id": "[parameters('envParameters').subnetRef]"
+                                "id": "[variables('HANAsubnetRef')]"
                             }
                         }
                     }

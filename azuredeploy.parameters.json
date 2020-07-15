@@ -4,7 +4,9 @@
     "parameters": {
 
           "envParameters":{
-              "value":{
+              
+            "value":{
+                  
                 
                 "VMName":  "testVm",
                 "VMSize":  "Standard_DS14_v2",
@@ -33,7 +35,8 @@
                     "imagePublisher": "SUSE",
                     "imageOffer": "SLES-SAP",
                     "sku": "12-SP2"
-                }
+                },
+                "diskReference":128
     
             }
         }
