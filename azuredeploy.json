@@ -7,8 +7,9 @@
         }
     },
   "variables": {
-        "nicName": "[concat(parameters('envParameters').vmName,'-Dynamic')]",
-        "HANAsubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('envParameters').NetworkName, parameters('envParameters').HANASubnetName)]"
+        "nicname": "[concat(parameters('envParameters').VM.vmName,'-Dynamic')]",
+        "tags": "[parameters('envParameters').tags]"
+        
      
 
 },
@@ -19,8 +20,10 @@
          {
             "apiVersion": "2018-04-01",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(parameters('envParameters').vmName,'-dynamic')]",
+            "name": "[concat(parameters('envParameters').VM.vmName,'-dynamic')]",
             "location": "[resourceGroup().location]",
+            "tags": "[union(parameters('envParameters').tags , json('{\"usedFor\":\"HANA Database \"}'))]",
+            
             "properties": {
                 "enableAcceleratedNetworking": false,
                 "ipConfigurations": [
@@ -31,7 +34,7 @@
                             "subnet": {
                                 
                                 
-                                "id": "[resourceId('eit-spk-net-prd-ea1-rg', 'Microsoft.Network/virtualNetworks/subnets', parameters('envParameters').NetworkName, 'DatabaseSubnet')]"
+                                "id": "[resourceId('eit-spk-net-prd-ea1-rg', 'Microsoft.Network/virtualNetworks/subnets', parameters('envParameters').Network.NetworkName, 'DatabaseSubnet')]"
                                 
                             }
                         }
@@ -42,7 +45,7 @@
        
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').vmName,'-shared')]",
+            "name": "[concat(parameters('envParameters').VM.vmName,'-shared')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -53,12 +56,12 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[parameters('envParameters').DiskReference]"
+                "diskSizeGB": "[parameters('envParameters').VM.DiskReference]"
             }
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').vmName,'-sap')]",
+            "name": "[concat(parameters('envParameters').VM.vmName,'-sap')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -69,12 +72,12 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[parameters('envParameters').DiskReference]"
+                "diskSizeGB": "[parameters('envParameters').VM.DiskReference]"
             }
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').vmName,'-backup1')]",
+            "name": "[concat(parameters('envParameters').VM.vmName,'-backup1')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -85,12 +88,12 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[parameters('envParameters').DiskReference]"
+                "diskSizeGB": "[parameters('envParameters').VM.DiskReference]"
             }
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').vmName,'-data1')]",
+            "name": "[concat(parameters('envParameters').VM.vmName,'-data1')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -101,12 +104,12 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[parameters('envParameters').DiskReference]"
+                "diskSizeGB": "[parameters('envParameters').VM.DiskReference]"
             }
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').vmName,'-data2')]",
+            "name": "[concat(parameters('envParameters').VM.vmName,'-data2')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -117,12 +120,12 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[parameters('envParameters').DiskReference]"
+                "diskSizeGB": "[parameters('envParameters').VM.DiskReference]"
             }
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').vmName,'-data3')]",
+            "name": "[concat(parameters('envParameters').VM.vmName,'-data3')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -133,14 +136,16 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": "[parameters('envParameters').DiskReference]"
+                "diskSizeGB": "[parameters('envParameters').VM.DiskReference]"
             }
         },        
         {
             "type": "Microsoft.Compute/availabilitySets",
-            "name": "[parameters('envParameters').AvailSetName]",
+            "name": "[parameters('envParameters').VM.AvailSetName]",
             "apiVersion": "2017-03-30",
             "location": "[resourceGroup().location]",
+            "tags": "[union(parameters('envParameters').tags , json('{\"usedFor\":\"HANA Database \"}'))]",
+
             "sku": {
                 "name": "Aligned"
             },
@@ -152,35 +157,36 @@
         {
             "apiVersion": "2019-07-01",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('envParameters').vmName]",
+            "name": "[parameters('envParameters').VM.vmName]",
             "location": "[resourceGroup().location]",
+            "tags": "[union(parameters('envParameters').tags , json('{\"usedFor\":\"HANA Database \"}'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-shared'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-sap'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-backup1'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-data1'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-data2'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-data3'))]",
-                "[resourceId('Microsoft.Compute/availabilitySets', parameters('envParameters').AvailSetName)]"
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-shared'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-sap'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-backup1'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data1'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data2'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data3'))]",
+                "[resourceId('Microsoft.Compute/availabilitySets', parameters('envParameters').VM.AvailSetName)]"
             ],
             "properties": {
                 "availabilitySet": {
-                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('envParameters').AvailSetName)]"
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('envParameters').VM.AvailSetName)]"
                   },                
                 "hardwareProfile": {
-                    "vmSize": "[parameters('envParameters').vmSize]"
+                    "vmSize": "[parameters('envParameters').VM.vmSize]"
                 },
                 "osProfile": {
-                    "computerName": "[parameters('envParameters').vmName]",
-                    "adminUsername": "[parameters('envParameters').vmUserName]",
-                    "adminPassword": "[parameters('envParameters').vmPassword]"
+                    "computerName": "[parameters('envParameters').VM.vmName]",
+                    "adminUsername": "[parameters('envParameters').VM.vmUserName]",
+                    "adminPassword": "[parameters('envParameters').VM.vmPassword]"
                 },
                 "storageProfile": {
                     "imageReference": {
-                        "publisher": "[parameters('envParameters').OperatingSystemSpec.imagePublisher]",
-                        "offer": "[parameters('envParameters').OperatingSystemSpec.imageOffer]",
-                        "sku": "[parameters('envParameters').OperatingSystemSpec.sku]",
+                        "publisher": "[parameters('envParameters').VM.OperatingSystemSpec.imagePublisher]",
+                        "offer": "[parameters('envParameters').VM.OperatingSystemSpec.imageOffer]",
+                        "sku": "[parameters('envParameters').VM.OperatingSystemSpec.sku]",
                         "version": "latest"
                     },
                     "osDisk": {
@@ -191,42 +197,42 @@
                             "lun": 0,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-shared'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-shared'))]"
                             }
                         },
                         {
                             "lun": 1,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-sap'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-sap'))]"
                             }
                         },
                         {
                             "lun": 2,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-backup1'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-backup1'))]"
                             }
                         },
                         {
                             "lun": 3,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-data1'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data1'))]"
                             }
                         },
                         {
                             "lun": 4,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-data2'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data2'))]"
                             }
                         },
                         {
                             "lun": 5,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').vmName,'-data3'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data3'))]"
                             }
                         }
                     ]
@@ -246,7 +252,7 @@
                     "location": "[resourceGroup().location]",
                     "apiversion": "2019-07-01",
                     "dependsOn": [
-                        "[concat('Microsoft.Compute/virtualMachines/', parameters('envParameters').vmName)]"
+                        "[concat('Microsoft.Compute/virtualMachines/', parameters('envParameters').VM.vmName)]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Azure.Extensions",
@@ -255,19 +261,19 @@
                         "autoUpgradeMinorVersion": true,
                         "settings": {
                             "fileUris": [
-                                "[concat(parameters('envParameters').baseUri,'scripts/allvmsizes.sh')]"
+                                "[concat(parameters('envParameters').sapInfo.baseUri,'scripts/allvmsizes.sh')]"
                             ],
                             "commandToExecute": "[concat('sh allvmsizes.sh \"', 
-                                parameters('envParameters').customUri, '\" \"' , 
-                                parameters('envParameters').HanaVersion, '\"  \"' , 
-                                parameters('envParameters').vmUserName, '\" \"', 
-                                parameters('envParameters').vmPassword,'\" \"', 
-                                parameters('envParameters').HANASID, '\" \"', 
-                                parameters('envParameters').HANANUMBER, '\" \"', 
-                                parameters('envParameters').vmSize, '\" \"',
-                                parameters('envParameters').SubscriptionEmail, '\" \"', 
-                                parameters('envParameters').SubscriptionID,'\"  \"' 
-                                , parameters('envParameters').SMTUri,'\"')]"
+                                parameters('envParameters').sapInfo.customUri, '\" \"' , 
+                                parameters('envParameters').sapInfo.HanaVersion, '\"  \"' , 
+                                parameters('envParameters').sapInfo.sapUserName, '\" \"', 
+                                parameters('envParameters').sapInfo.sapPassword,'\" \"', 
+                                parameters('envParameters').sapInfo.HANASID, '\" \"', 
+                                parameters('envParameters').sapInfo.HANANUMBER, '\" \"', 
+                                parameters('envParameters').VM.vmSize, '\" \"',
+                                parameters('envParameters').sapInfo.SubscriptionEmail, '\" \"', 
+                                parameters('envParameters').sapInfo.SubscriptionID,'\"  \"' 
+                                , parameters('envParameters').sapInfo.SMTUri,'\"')]"
                         }
                     }
                 }

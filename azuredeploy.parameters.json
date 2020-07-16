@@ -2,42 +2,65 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-
-          "envParameters":{
-              
+        "envParameters":{
             "value":{
-                  
-                
-                "VMName":  "testVm",
-                "VMSize":  "Standard_DS14_v2",
-                "NetworkName":  "eitspk-sapprd-ea1-vnet",
-                
-                "HANASubnetName":  "DatabaseSubnet",
-                
-                "ManagementSubnetName":  "SAPMgmtSubnet",
-                
-                "customURI": "https://eitmedpres1sta.blob.core.windows.net/sapmedias/",
-                "VMUserName":  "testuser",
-                "VMPassword":  "YourPassword123.",
-                "OperatingSystem":   "SLES for SAP 12 SP3",
-                "HANASID":   "H10",
-                "HANANumber":  "00",
-                "ExistingNetworkResourceGroup":  "no",
-                "IPAllocationMethod":  "Static",
-                
-                "HanaVersion":  "SAP HANA PLATFORM EDITION 2.0 SPS04",
-                "AvailSetName":  "hana-avail",
-                "SubscriptionEmail":  "",
-                "SubscriptionID":  "",
-                "SMTUri":  "",
-                "baseUri": "https://raw.githubusercontent.com/antonioexactly/arm-hana-deploy/master/",
-                "OperatingSystemSpec": {
-                    "imagePublisher": "SUSE",
-                    "imageOffer": "SLES-SAP",
-                    "sku": "12-SP2"
+                "General":{
+                    
+                        "customerName": "EIT",
+                        "customerID": "eit",
+                        "location": "centralus",
+                        "locationName": "ea1",
+                        "environment": "prd"
+                        
+                    
                 },
-                "diskReference":128
-    
+                "tags": {
+                    
+                        "customerName": "ExactlyIT",
+                        "environment": "test"
+                        
+                    
+                },
+                "VM":{
+                    
+                        "VMName":  "testVm",
+                        "VMSize":  "Standard_DS14_v2",
+                        "VMUserName":  "testuser",
+                        "VMPassword":  "YourPassword123.",
+                        "AvailSetName":  "hana-avail",
+                        "OperatingSystemSpec": {
+                            "imagePublisher": "SUSE",
+                            "imageOffer": "SLES-SAP",
+                            "sku": "12-SP2"
+                        },
+                        "diskReference":128
+                
+                },
+
+                "Network":{
+                
+                        "NetworkName":  "eitspk-sapprd-ea1-vnet",
+                        "HANASubnetName":  "DatabaseSubnet",
+                        "ManagementSubnetName":  "SAPMgmtSubnet"
+                
+                },
+
+                "sapInfo":{
+                
+                        "customURI": "https://eitmedpres1sta.blob.core.windows.net/sapmedias/",
+                        "HANASID":   "H10",
+                        "HANANumber":  "00",
+                        "sapUserName":"sapadmin",
+                        "sapPassword":"Rs21011432...",
+                        "ExistingNetworkResourceGroup":  "no",
+                        "IPAllocationMethod":  "Static",
+                        "HanaVersion":  "SAP HANA PLATFORM EDITION 2.0 SPS04",
+                        "SubscriptionEmail":  "",
+                        "SubscriptionID":  "",
+                        "SMTUri":  "",
+                        "baseUri": "https://raw.githubusercontent.com/antonioexactly/arm-hana-deploy/master/"
+                
+                }
             }
         }
     }
