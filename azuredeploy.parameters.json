@@ -19,15 +19,14 @@
                         "customerName": "ExactlyIT",
                         "environment": "test"
                         
-                    
+                        
                 },
                 "VM":{
                     
-                        "VMName":  "testVm",
+                        "VMName":  "hana01",
                         "VMSize":  "Standard_DS14_v2",
                         "VMUserName":  "testuser",
                         "VMPassword":  "YourPassword123.",
-                        "AvailSetName":  "hana-avail",
                         "OperatingSystemSpec": {
                             "imagePublisher": "SUSE",
                             "imageOffer": "SLES-SAP",
@@ -41,7 +40,7 @@
                 
                         "NetworkName":  "eitspk-sapprd-ea1-vnet",
                         "HANASubnetName":  "DatabaseSubnet",
-                        "ManagementSubnetName":  "SAPMgmtSubnet"
+                        "NetworkResourceGroup":"eit-spk-net-prd-ea1-rg"
                 
                 },
 
@@ -52,8 +51,6 @@
                         "HANANumber":  "00",
                         "sapUserName":"sapadmin",
                         "sapPassword":"Rs21011432...",
-                        "ExistingNetworkResourceGroup":  "no",
-                        "IPAllocationMethod":  "Static",
                         "HanaVersion":  "SAP HANA PLATFORM EDITION 2.0 SPS04",
                         "SubscriptionEmail":  "",
                         "SubscriptionID":  "",

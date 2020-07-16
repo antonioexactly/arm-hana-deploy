@@ -356,36 +356,6 @@ else
     fi
 fi
 
-
-#if [ "${hanapackage}" = "51054413" ]
-#then
-#  cd $SAPBITSDIR
-#  /usr/bin/wget $Uri/SapBits/${hanapackage}.ZIP
-#  mkdir ${hanapackage}
-#  cd ${hanapackage}
-#  unzip ../${hanapackage}.ZIP
-#  cd $SAPBITSDIR
-  #add additional requirement
-#  zypper install -y libatomic1
-#else
-#  cd /hana/data/sapbits
-#  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part1.exe
-#  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part2.rar
-#  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part3.rar
-#  /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part4.rar
-#  cd $SAPBITSDIR
-
-#  echo "hana unrar start" >> /tmp/parameter.txt
-  #!/bin/bash
-#  cd $SAPBITSDIR
-#  unrar  -o- x ${hanapackage}_part1.exe
-#  echo "hana unrar end" >> /tmp/parameter.txt
-
-#fi
-#####################
-
-
-
 #!/bin/bash
 cd /hana/data/sapbits
 echo "hana download start" >> /tmp/parameter.txt

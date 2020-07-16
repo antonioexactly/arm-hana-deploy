@@ -7,20 +7,25 @@
         }
     },
   "variables": {
-        "nicname": "[concat(parameters('envParameters').VM.vmName,'-Dynamic')]",
-        "tags": "[parameters('envParameters').tags]"
         
-     
+        "networkinterfacename":"[toLower(concat(parameters('envParameters').General.CustomerID, '-', 
+        parameters('envParameters').VM.vmName, '-' ,
+        first(parameters('envParameters').general.environment),
+        first(parameters('envParameters').VM.OperatingSystemSpec.imageOffer),'-nic'))]",
+        "asets":"[toLower(concat(parameters('envParameters').General.CustomerID, '-', 
+        parameters('envParameters').VM.vmName, '-' ,
+        first(parameters('envParameters').general.environment),'-aset'))]",
+        "vmname":"[toLower(concat(parameters('envParameters').General.CustomerID, '-sap-', 
+        first(parameters('envParameters').general.environment),
+        if(equals(first(parameters('envParameters').VM.OperatingSystemSpec.imageOffer) ,'s'),'l','w' ),'-',
+        parameters('envParameters').VM.vmName))]"
 
 },
     "resources": [
-
-
-         
-         {
+        {
             "apiVersion": "2018-04-01",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(parameters('envParameters').VM.vmName,'-dynamic')]",
+            "name": "[variables('networkinterfacename')]",
             "location": "[resourceGroup().location]",
             "tags": "[union(parameters('envParameters').tags , json('{\"usedFor\":\"HANA Database \"}'))]",
             
@@ -34,7 +39,7 @@
                             "subnet": {
                                 
                                 
-                                "id": "[resourceId('eit-spk-net-prd-ea1-rg', 'Microsoft.Network/virtualNetworks/subnets', parameters('envParameters').Network.NetworkName, 'DatabaseSubnet')]"
+                                "id": "[resourceId(parameters('envParameters').Network.NetworkResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', parameters('envParameters').Network.NetworkName, 'DatabaseSubnet')]"
                                 
                             }
                         }
@@ -45,7 +50,7 @@
        
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').VM.vmName,'-shared')]",
+            "name": "[concat(variables('vmname'),'-shared')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -61,7 +66,7 @@
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').VM.vmName,'-sap')]",
+            "name": "[concat(variables('vmname'),'-sap')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -77,7 +82,7 @@
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').VM.vmName,'-backup1')]",
+            "name": "[concat(variables('vmname'),'-backup1')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -93,7 +98,7 @@
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').VM.vmName,'-data1')]",
+            "name": "[concat(variables('vmname'),'-data1')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -109,7 +114,7 @@
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').VM.vmName,'-data2')]",
+            "name": "[concat(variables('vmname'),'-data2')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -125,7 +130,7 @@
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('envParameters').VM.vmName,'-data3')]",
+            "name": "[concat(variables('vmname'),'-data3')]",
             "apiVersion": "2018-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -141,7 +146,7 @@
         },        
         {
             "type": "Microsoft.Compute/availabilitySets",
-            "name": "[parameters('envParameters').VM.AvailSetName]",
+            "name": "[variables('asets')]",
             "apiVersion": "2017-03-30",
             "location": "[resourceGroup().location]",
             "tags": "[union(parameters('envParameters').tags , json('{\"usedFor\":\"HANA Database \"}'))]",
@@ -157,28 +162,28 @@
         {
             "apiVersion": "2019-07-01",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('envParameters').VM.vmName]",
+            "name": "[variables('vmname')]",
             "location": "[resourceGroup().location]",
             "tags": "[union(parameters('envParameters').tags , json('{\"usedFor\":\"HANA Database \"}'))]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-shared'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-sap'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-backup1'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data1'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data2'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data3'))]",
-                "[resourceId('Microsoft.Compute/availabilitySets', parameters('envParameters').VM.AvailSetName)]"
+                "[resourceId('Microsoft.Network/networkInterfaces',variables('networkinterfacename'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-shared'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-sap'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-backup1'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-data1'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-data2'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-data3'))]",
+                "[resourceId('Microsoft.Compute/availabilitySets', variables('asets'))]"
             ],
             "properties": {
                 "availabilitySet": {
-                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('envParameters').VM.AvailSetName)]"
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('asets'))]"
                   },                
                 "hardwareProfile": {
                     "vmSize": "[parameters('envParameters').VM.vmSize]"
                 },
                 "osProfile": {
-                    "computerName": "[parameters('envParameters').VM.vmName]",
+                    "computerName": "[variables('vmname')]",
                     "adminUsername": "[parameters('envParameters').VM.vmUserName]",
                     "adminPassword": "[parameters('envParameters').VM.vmPassword]"
                 },
@@ -197,42 +202,42 @@
                             "lun": 0,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-shared'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-shared'))]"
                             }
                         },
                         {
                             "lun": 1,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-sap'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-sap'))]"
                             }
                         },
                         {
                             "lun": 2,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-backup1'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-backup1'))]"
                             }
                         },
                         {
                             "lun": 3,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data1'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-data1'))]"
                             }
                         },
                         {
                             "lun": 4,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data2'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-data2'))]"
                             }
                         },
                         {
                             "lun": 5,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('envParameters').VM.vmName,'-data3'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-data3'))]"
                             }
                         }
                     ]
@@ -240,7 +245,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('networkinterfacename'))]"
                         }
                     ]
                 }
@@ -252,7 +257,7 @@
                     "location": "[resourceGroup().location]",
                     "apiversion": "2019-07-01",
                     "dependsOn": [
-                        "[concat('Microsoft.Compute/virtualMachines/', parameters('envParameters').VM.vmName)]"
+                        "[concat('Microsoft.Compute/virtualMachines/', variables('vmname'))]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Azure.Extensions",
