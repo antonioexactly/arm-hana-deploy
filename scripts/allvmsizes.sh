@@ -1,4 +1,3 @@
-#!/bin/bash
 set -x
 
 Uri=${1}
@@ -131,6 +130,8 @@ fi
 
 #insert more VMs here from Backup
 
+
+#!/bin/bash
 echo "mounthanashared start" >> /tmp/parameter.txt
 ##debug
 echo $hsharedpart >> /tmp/parameter.txt
