@@ -38,16 +38,16 @@
 
                 "Network":{
                 
-                        "NetworkName":  "eitspk-sapprd-ea1-vnet",
+                        "NetworkName":  "eit-sap-prd-ea1-vnet",
                         "HANASubnetName":  "DatabaseSubnet",
-                        "NetworkResourceGroup":"eit-spk-net-prd-ea1-rg"
+                        "NetworkResourceGroup":"eit-net-pr-ea1-rg"
                 
                 },
 
                 "sapInfo":{
                 
-                        "customURI": "https://eitmedpres1sta.blob.core.windows.net/sapmedias/",
-                        "HANASID":   "H10",
+                        "customURI": "https://eitmedpres1sta.blob.core.windows.net/sapmedias",
+                        "HANASID":   "H20",
                         "HANANumber":  "00",
                         "sapUserName":"sapadmin",
                         "sapPassword":"Rs21011432...",

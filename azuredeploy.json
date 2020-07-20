@@ -136,7 +136,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces',variables('networkinterfacename'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-shared'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-sap'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-backup'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-data'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-log'))]",
@@ -176,25 +175,18 @@
                             "lun": 1,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-sap'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-backup'))]"
                             }
                         },
                         {
                             "lun": 2,
                             "createOption": "Attach",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-backup'))]"
-                            }
-                        },
-                        {
-                            "lun": 3,
-                            "createOption": "Attach",
-                            "managedDisk": {
                                 "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-data'))]"
                             }
                         },
                         {
-                            "lun": 4,
+                            "lun": 3,
                             "createOption": "Attach",
                             "managedDisk": {
                                 "id": "[resourceId('Microsoft.Compute/disks/', concat(variables('vmname'),'-log'))]"
