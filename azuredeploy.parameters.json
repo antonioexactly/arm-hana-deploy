@@ -23,14 +23,14 @@
                 },
                 "VM":{
                     
-                        "VMName":  "hana01",
+                        "VMName":  "01",
                         "VMSize":  "Standard_DS14_v2",
                         "VMUserName":  "testuser",
                         "VMPassword":  "YourPassword123.",
                         "OperatingSystemSpec": {
                             "imagePublisher": "SUSE",
                             "imageOffer": "SLES-SAP",
-                            "sku": "12-SP2"
+                            "sku": "12-SP4"
                         },
                         "diskReference":128
                 

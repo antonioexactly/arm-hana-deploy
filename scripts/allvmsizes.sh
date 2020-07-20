@@ -22,10 +22,7 @@ fi
 
 #decode hana version parameter
 HANAVER=${HANAVER^^}
-#if [ "${HANAVER}" = "SAP HANA PLATFORM EDITION 2.0 SPS04" ]
-#then
-#  hanapackage="51054413"
-#fi
+
 
 #get the VM size via the instance api
 VMSIZE=`curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/vmSize?api-version=2017-08-01&format=text"`
@@ -45,6 +42,13 @@ mkdir /hana/shared
 mkdir /hana/backup
 mkdir /usr/sap
 
+hdatapart=""
+hsharedpart=""
+hlogpart=""
+husrpart=""
+hbackuppart=""
+
+
 zypper in -t pattern -y sap-hana
 saptune solution apply HANA
 saptune daemon start
@@ -61,50 +65,64 @@ cp -f /etc/waagent.conf.new /etc/waagent.conf
 #don't restart waagent, as this will kill the custom script.
 #service waagent restart
 
-# this assumes that 5 disks are attached at lun 0 through 4
-echo "Creating partitions and physical volumes"
-pvcreate -ff -y /dev/disk/azure/scsi1/lun0   
-pvcreate -ff -y  /dev/disk/azure/scsi1/lun1
-pvcreate -ff -y  /dev/disk/azure/scsi1/lun2
-pvcreate -ff -y  /dev/disk/azure/scsi1/lun3
-pvcreate -ff -y  /dev/disk/azure/scsi1/lun4
-pvcreate -ff -y  /dev/disk/azure/scsi1/lun5
-
-if [ $VMSIZE == "Standard_E16s_v3" ] || [ "$VMSIZE" == "Standard_E32s_v3" ] || [ "$VMSIZE" == "Standard_E64s_v3" ] || [ "$VMSIZE" == "Standard_GS5" ] || [ "$VMSIZE" == "Standard_M32ts" ] || [ "$VMSIZE" == "Standard_M32ls" ] || [ "$VMSIZE" == "Standard_M64ls" ] || [ $VMSIZE == "Standard_DS14_v2" ] ; then
+if [ "$VMSIZE" == "Standard_M32ts" ] || [ "$VMSIZE" == "Standard_M32ls" ] || [ "$VMSIZE" == "Standard_M64ls" ] || [ $VMSIZE == "Standard_DS14_v2" ] ; then
 echo "logicalvols start" >> /tmp/parameter.txt
+  # this assumes that 5 disks are attached at lun 0 through 4
+  echo "Creating partitions and physical volumes"
+  pvcreate -ff -y /dev/disk/azure/scsi1/lun0   
+  pvcreate -ff -y  /dev/disk/azure/scsi1/lun1
+  pvcreate -ff -y  /dev/disk/azure/scsi1/lun2
+  pvcreate -ff -y  /dev/disk/azure/scsi1/lun3
+
   #shared volume creation
   sharedvglun="/dev/disk/azure/scsi1/lun0"
-  vgcreate sharedvg $sharedvglun
-  lvcreate -l 100%FREE -n sharedlv sharedvg 
+  sharedvgname="sap""$HANASID""vg"
+  sharedlvname="lvsap""$HANASID""01"
+  vgcreate $sharedvgname $sharedvglun
+  lvcreate -l 50%FREE -n $sharedlvname $sharedvgname 
  
   #usr volume creation
-  usrsapvglun="/dev/disk/azure/scsi1/lun1"
-  vgcreate usrsapvg $usrsapvglun
-  lvcreate -l 100%FREE -n usrsaplv usrsapvg
+  #usrsapvglun="/dev/disk/azure/scsi1/lun0"
+  #vgcreate $sharedvgname $usrsapvglun
+  usrlvname="lvsap""$HANASID""02"
+  lvcreate -l 100%FREE -n $usrlvname $sharedvgname
 
   #backup volume creation
-  backupvglun="/dev/disk/azure/scsi1/lun2"
+  backupvglun="/dev/disk/azure/scsi1/lun1"
+  backupvgname="sap""$HANASID""bvg"
+  backuplvname="lvsap""$HANASID""b01"
   vgcreate backupvg $backupvglun
-  lvcreate -l 100%FREE -n backuplv backupvg 
+  lvcreate -l 100%FREE -n $backuplvname $backupvgname 
 
   #data volume creation
-  datavg1lun="/dev/disk/azure/scsi1/lun3"
-  datavg2lun="/dev/disk/azure/scsi1/lun4"
-  datavg3lun="/dev/disk/azure/scsi1/lun5"
-  vgcreate datavg $datavg1lun $datavg2lun $datavg3lun
-  PHYSVOLUMES=3
-  STRIPESIZE=64
-  lvcreate -i$PHYSVOLUMES -I$STRIPESIZE -l 70%FREE -n datalv datavg
-  lvcreate -i$PHYSVOLUMES -I$STRIPESIZE -l 100%FREE -n loglv datavg
+  datavglun="/dev/disk/azure/scsi1/lun2"
+  logvglun="/dev/disk/azure/scsi1/lun3"
+  datavgname="sap""$HANASID""dvg"
+  logvgname="sap""$HANASID""lvg"
+  datalvname="lvsap""$HANASID""d01"
+  loglvname="lvsap""$HANASID""l01"
+  vgcreate $datavgname $datavglun 
+  vgcreate $logvgname $logvglun
+  #PHYSVOLUMES=3
+  #STRIPESIZE=64
+  #lvcreate -i$PHYSVOLUMES -I$STRIPESIZE -l 70%FREE -n datalv datavg
+  #lvcreate -i$PHYSVOLUMES -I$STRIPESIZE -l 100%FREE -n loglv datavg
+  lvcreate -l 100%FREE -n $datalvname $datavgname
+  lvcreate -l 100%FREE -n $loglvname $logvgname
 
 
-  mkfs.xfs /dev/datavg/datalv
-  mkfs.xfs /dev/datavg/loglv
-  mkfs -t xfs /dev/sharedvg/sharedlv 
-  mkfs -t xfs /dev/backupvg/backuplv 
-  mkfs -t xfs /dev/usrsapvg/usrsaplv
-  mount -t xfs /dev/datavg/loglv /hana/log 
-  echo "/dev/mapper/datavg-loglv /hana/log xfs defaults 0 0" >> /etc/fstab
+  mkfs -t xfs /dev/$datavgname/$datalvname
+  mkfs -t xfs /dev/$logvgname/$loglvname
+  mkfs -t xfs /dev/$sharedvgname/$sharedlvname
+  mkfs -t xfs /dev/$backupvgname/$backuplvname 
+  mkfs -t xfs /dev/$sharedvgname/$usrlvname
+
+  $hdatapart="/dev/""$datavgname""/""$datalvname"
+  $hsharedpart="/dev/""$sharedvgname""/""$sharedlvname"
+  $hlogpart="/dev/""$logvgname""/""$loglvname"
+  $husrpart="/dev/""$sharedvgname""/""$usrlvname"
+  $hbackuppart="/dev/""$backupvgname""/""$backuplvname"
+  
 echo "logicalvols end" >> /tmp/parameter.txt
 fi
 
@@ -271,17 +289,19 @@ fi
 
 #!/bin/bash
 echo "mounthanashared start" >> /tmp/parameter.txt
-mount -t xfs /dev/sharedvg/sharedlv /hana/shared
-mount -t xfs /dev/backupvg/backuplv /hana/backup 
-mount -t xfs /dev/usrsapvg/usrsaplv /usr/sap
-mount -t xfs /dev/datavg/datalv /hana/data
+mount -t xfs $hsharedpart /hana/shared
+mount -t xfs $hbackuppart /hana/backup 
+mount -t xfs $husrpart /usr/sap
+mount -t xfs $hdatapart /hana/data
+mount -t xfs $hlogpart /hana/log
 echo "mounthanashared end" >> /tmp/parameter.txt
 
 echo "write to fstab start" >> /tmp/parameter.txt
-echo "/dev/mapper/datavg-datalv /hana/data xfs defaults 0 0" >> /etc/fstab
-echo "/dev/mapper/sharedvg-sharedlv /hana/shared xfs defaults 0 0" >> /etc/fstab
-echo "/dev/mapper/backupvg-backuplv /hana/backup xfs defaults 0 0" >> /etc/fstab
-echo "/dev/mapper/usrsapvg-usrsaplv /usr/sap xfs defaults 0 0" >> /etc/fstab
+echo "$hdatapart"" /hana/data xfs defaults 0 0" >> /etc/fstab
+echo "$hsharedpart"" /hana/shared xfs defaults 0 0" >> /etc/fstab
+echo "$hbackuppart"" /hana/backup xfs defaults 0 0" >> /etc/fstab
+echo "$husrpart"" /usr/sap xfs defaults 0 0" >> /etc/fstab
+echo "$hlogpart"" /hana/log xfs defaults 0 0" >> /etc/fstab
 echo "write to fstab end" >> /tmp/parameter.txt
 
 if [ ! -d "/hana/data/sapbits" ]
