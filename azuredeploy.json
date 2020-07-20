@@ -16,9 +16,7 @@
         parameters('envParameters').VM.vmName, '-' ,
         first(parameters('envParameters').general.environment),'-aset'))]",
     "vmname": "[toLower(concat(parameters('envParameters').General.CustomerID, '-hn', parameters('envParameters').sapInfo.HANASID, '-', 
-        first(parameters('envParameters').general.environment),
-        if(equals(first(parameters('envParameters').VM.OperatingSystemSpec.imageOffer) ,'s'),'l','w' ),'-',
-        parameters('envParameters').VM.vmName))]"
+        first(parameters('envParameters').general.environment),l,'-',parameters('envParameters').VM.vmName))]"
 
   },
     "resources": [
